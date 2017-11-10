@@ -12,19 +12,17 @@ import { InitOption } from './types/core.type';
 import { EventEmitter2 } from 'eventemitter2';
 
 const only = require('only');
-const GLOBAL: any = window;
 
 class Core extends EventEmitter2 {
     private middleware: any[];
     private context: any;
     private runtime: any;
-    public env: string = GLOBAL.__prajnaEnv__ || 'dev';
-    public autopv: string = GLOBAL.__prajnaAutoPV__ || true;
-    public url: string = 'http://localhost:8081' || GLOBAL.__envMapping__[this.env];
-    public pageUrl: string = GLOBAL.location.href;
     public pageId: string = '';
     public channel: string = null;
     public pageView: any;
+    public env: string = 'dev';
+    public autopv: boolean = true;
+    public pageUrl: string = '';
 
     constructor(opt: any) {
         super();
@@ -64,7 +62,7 @@ class Core extends EventEmitter2 {
         return handler;
     }
 
-    private createContext(): void {		// TODO
+    private createContext(): void { // TODO
         const context = Object.create(this.context);
         const runtime = context.runtime = Object.create(this.runtime);
         context.core = runtime.core = this;
@@ -84,7 +82,7 @@ class Core extends EventEmitter2 {
             .use(eventMiddleware)
             .use(reportMiddleware);
         this.on('BEAT_EVENT', this.callback());
-        this.beat();			// beat once when start
+        this.beat(); // beat once when start
         return;
     }
 
